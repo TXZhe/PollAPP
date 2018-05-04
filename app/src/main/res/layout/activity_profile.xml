@@ -1,9 +1,200 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:orientation="vertical"
     tools:context="capstone3.pollapp.ProfileActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="1.5"
+        android:background="#ffffff"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10pt"
+            android:textColor="@color/colorBackground"
+            android:text="Let us know about you~" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="10"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="0.3"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="2"
+            >
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:layout_gravity="center"
+                android:gravity="end|center"
+                android:padding="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="8pt"
+                    android:textColor="#ffffff"
+                    android:text="Name:" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="6"
+                android:gravity="center_vertical">
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:textSize="8pt"
+                    android:hint="Bruce Wayne"
+                    android:textColorHint="#AAAAAA"
+                    android:background="#ffffff"
+                    android:padding="10px"
+                    android:id="@+id/et_name"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="2"
+            >
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="end|center"
+                android:padding="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="8pt"
+                    android:textColor="#ffffff"
+                    android:text="Birth day:" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="6"
+                android:gravity="center_vertical">
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:ems="10"
+                    android:textSize="8pt"
+                    android:hint="2008-08-08"
+                    android:textColorHint="#AAAAAA"
+                    android:background="#ffffff"
+                    android:padding="10px"
+                    android:id="@+id/et_birth"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="2"
+            >
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="end|center"
+                android:padding="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="8pt"
+                    android:textColor="#ffffff"
+                    android:text="Gender:" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="6"
+                android:gravity="center">
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="10px"
+                    android:id="@+id/gendergroup">
+
+                    <RadioButton
+                        android:id="@+id/rbMale"
+                        android:layout_width="0px"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="rbclick"
+                        android:checked="false"
+                        android:text="Male" />
+
+                    <RadioButton
+                        android:id="@+id/rbFemale"
+                        android:layout_width="0px"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="rbclick"
+                        android:checked="false"
+                        android:text="Female" />
+                </RadioGroup>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="2"
+            >
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="end|center"
+                android:padding="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="8pt"
+                    android:textColor="#ffffff"
+                    android:text="Scenes:" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="6"
+                android:gravity="center_vertical">
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="8pt"
+                    android:id="@+id/sp_scenes"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="3"
+            android:gravity="center">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="profile_submit"
+                android:text="START" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

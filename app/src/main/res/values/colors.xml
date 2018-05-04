@@ -3,4 +3,12 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorBackground">#44ad87</color>
+    <color name="colorOrangeYellow">#EB9534</color>
+    <color name="colorOrangeRed">#C4401B</color>
+    <color name="colorSummerDGreen">#5FD9CD</color>
+    <color name="colorSummerYellow">#EAF786</color>
+    <color name="colorSummerRed">#FFB5A1</color>
+    <color name="colorSummerLGreen">#B8FFB8</color>
+    <color name="colorSummerLBlue">#B8F4FF</color>
 </resources>

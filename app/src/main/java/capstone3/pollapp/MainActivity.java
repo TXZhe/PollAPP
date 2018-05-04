@@ -1,6 +1,13 @@
 package capstone3.pollapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -12,9 +19,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.ref.WeakReference;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.ResponseBody;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private ImageView comicIV;
+    private String url;
+    private SharedPreferences.Editor editor;
+
+    private Handler myHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +65,64 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //start new
+        comicIV = (ImageView)findViewById(R.id.iv_comic);
+        url = "https://www.lego.com/r/www/r/catalogs/-/media/catalogs/characters/lbm%20characters/primary/70900_1to1_batman_360_480.png?l.r=1668006940";
+
+        SharedPreferences preferences = getSharedPreferences("PROFILES", Context.MODE_PRIVATE);
+        editor = preferences.edit();
+
+        //make a json
+        JSONObject jsonProfile = new JSONObject();
+        try {
+            jsonProfile.put("usrname", preferences.getString("usrname", "NONE"));
+            jsonProfile.put("userbirth", preferences.getString("userbirth", "NONE"));
+            jsonProfile.put("usrgender", preferences.getString("usrgender", "NONE"));
+            jsonProfile.put("usrscenes", preferences.getString("usrscenes", "NONE"));
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        myHandler=new Handler(getApplicationContext().getMainLooper());
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Looper.prepare();
+                final Bitmap img = getPic(url);//下载
+                myHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        comicIV.setImageBitmap(img);
+                    }
+                });
+                Looper.loop();
+            }
+        });
+        thread.start();
+    }
+    /***********************new****************************/
+
+    public Bitmap getPic(String url) {
+        //获取okHttp对象get请求
+        try {
+            OkHttpClient client = new OkHttpClient();
+            //获取请求对象
+            Request request = new Request.Builder().url(url).build();
+            //获取响应体
+            ResponseBody body = client.newCall(request).execute().body();
+            //获取流
+            InputStream in = body.byteStream();
+            //转化为bitmap
+            Bitmap bitmap = BitmapFactory.decodeStream(in);
+            return bitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
+    /*******************end new****************************/
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
