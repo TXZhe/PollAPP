@@ -1,6 +1,7 @@
 package capstone3.pollapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +11,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,6 +22,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,15 +55,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -103,23 +102,71 @@ public class MainActivity extends AppCompatActivity
     }
     /***********************new****************************/
 
+
+    /**
+     *  Get picture from server
+     * @param url
+     * @return bitmap
+     */
     public Bitmap getPic(String url) {
         //获取okHttp对象get请求
         try {
             OkHttpClient client = new OkHttpClient();
-            //获取请求对象
             Request request = new Request.Builder().url(url).build();
-            //获取响应体
             ResponseBody body = client.newCall(request).execute().body();
-            //获取流
             InputStream in = body.byteStream();
-            //转化为bitmap
             Bitmap bitmap = BitmapFactory.decodeStream(in);
             return bitmap;
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+
+    /**
+     * Profile button
+     */
+    public void goProfile(View v)
+    {
+        //turn to ProfileActivity
+        startActivity(new Intent(MainActivity.this,ProfileActivity.class));
+        MainActivity.this.finish();
+    }
+
+
+    /**
+     * location button
+     */
+    int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+    public void goLocation(View v)
+    {
+        //turn to LocationActivity
+        try {
+            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN).build(this);
+            startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+        } catch (GooglePlayServicesRepairableException e) {
+            // TODO: Handle the error.
+        } catch (GooglePlayServicesNotAvailableException e) {
+            // TODO: Handle the error.
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                Log.i("PS", "Place: " + place.getName());
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(this, data);
+                // TODO: Handle the error.
+                Log.i("PS", status.getStatusMessage());
+
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }
     }
 
     /*******************end new****************************/
