@@ -8,9 +8,6 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -26,7 +23,9 @@ import android.widget.ImageView;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceDetectionClient;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 
 import org.json.JSONException;
@@ -34,7 +33,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.ref.WeakReference;
+import java.util.Calendar;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -48,6 +47,16 @@ public class MainActivity extends AppCompatActivity
     private SharedPreferences.Editor editor;
 
     private Handler myHandler;
+
+    private String usrname;
+    private String usrgender;
+    private String usrage;
+    private String usrscenes;
+    private String usrlocation;
+    private String usrlatlng;
+
+    private GeoDataClient mGeoDataClient;
+    private PlaceDetectionClient mPlaceDetectionClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,16 +81,44 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences preferences = getSharedPreferences("PROFILES", Context.MODE_PRIVATE);
         editor = preferences.edit();
 
+        usrname = preferences.getString("usrname", "NONE");
+        usrgender = preferences.getString("usrgender", "NONE");
+        usrscenes = preferences.getString("usrscenes", "NONE");
+        usrlocation = preferences.getString("usrlocation", "NONE");
+        usrlatlng = preferences.getString("usrlatlng", "NONE");
+
+        this.setTitle(usrlocation);
+
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH)+1;
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        String usrbd = preferences.getString("userbirth", "NONE");
+        String[] usrymd = usrbd.split("-");
+        if(month<Integer.parseInt(usrymd[1]) ||
+                (month==Integer.parseInt(usrymd[1])&& day<Integer.parseInt(usrymd[2])))
+        {
+            usrage = Integer.toString(year - Integer.parseInt(usrymd[0])-1);
+        }
+        else
+        {
+            usrage = Integer.toString(year - Integer.parseInt(usrymd[0]));
+        }
+
+
         //make a json
         JSONObject jsonProfile = new JSONObject();
         try {
-            jsonProfile.put("usrname", preferences.getString("usrname", "NONE"));
-            jsonProfile.put("userbirth", preferences.getString("userbirth", "NONE"));
-            jsonProfile.put("usrgender", preferences.getString("usrgender", "NONE"));
-            jsonProfile.put("usrscenes", preferences.getString("usrscenes", "NONE"));
+            jsonProfile.put("usrname", usrname);
+            jsonProfile.put("userage", usrage);
+            jsonProfile.put("usrgender", usrgender);
+            jsonProfile.put("usrscenes", usrscenes);
+            jsonProfile.put("usrlocation", usrlocation);
+            jsonProfile.put("usrlatlng", usrlatlng);
         }catch (JSONException e) {
             e.printStackTrace();
         }
+        Log.i("json",jsonProfile.toString());
 
         myHandler=new Handler(getApplicationContext().getMainLooper());
         Thread thread = new Thread(new Runnable() {
@@ -138,37 +175,12 @@ public class MainActivity extends AppCompatActivity
     /**
      * location button
      */
-    int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     public void goLocation(View v)
     {
         //turn to LocationActivity
-        try {
-            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN).build(this);
-            startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
-        } catch (GooglePlayServicesRepairableException e) {
-            // TODO: Handle the error.
-        } catch (GooglePlayServicesNotAvailableException e) {
-            // TODO: Handle the error.
-        }
+        startActivity(new Intent(MainActivity.this, LocationActivity.class));
+        MainActivity.this.finish();
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                Place place = PlaceAutocomplete.getPlace(this, data);
-                Log.i("PS", "Place: " + place.getName());
-            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
-                Status status = PlaceAutocomplete.getStatus(this, data);
-                // TODO: Handle the error.
-                Log.i("PS", status.getStatusMessage());
-
-            } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
-            }
-        }
-    }
-
     /*******************end new****************************/
     @Override
     public void onBackPressed() {
