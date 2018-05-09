@@ -19,14 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
-
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.GeoDataClient;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceDetectionClient;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,7 +37,6 @@ public class MainActivity extends AppCompatActivity
 
     private ImageView comicIV;
     private String url;
-    private SharedPreferences.Editor editor;
 
     private Handler myHandler;
 
@@ -55,8 +47,6 @@ public class MainActivity extends AppCompatActivity
     private String usrlocation;
     private String usrlatlng;
 
-    private GeoDataClient mGeoDataClient;
-    private PlaceDetectionClient mPlaceDetectionClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,13 +63,11 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
         //start new
         comicIV = (ImageView)findViewById(R.id.iv_comic);
         url = "https://www.lego.com/r/www/r/catalogs/-/media/catalogs/characters/lbm%20characters/primary/70900_1to1_batman_360_480.png?l.r=1668006940";
 
         SharedPreferences preferences = getSharedPreferences("PROFILES", Context.MODE_PRIVATE);
-        editor = preferences.edit();
 
         usrname = preferences.getString("usrname", "NONE");
         usrgender = preferences.getString("usrgender", "NONE");
@@ -104,6 +92,20 @@ public class MainActivity extends AppCompatActivity
         {
             usrage = Integer.toString(year - Integer.parseInt(usrymd[0]));
         }
+
+        //nav header name
+        View headerView = navigationView.getHeaderView(0);
+        TextView navHeaderName = (TextView)headerView.findViewById(R.id.nav_header_name);
+        String navHeaderNamest;
+        if(usrgender.equals("Male"))
+        {
+            navHeaderNamest = "Mr."+usrname;
+        }
+        else
+        {
+            navHeaderNamest = "Mr."+usrname;
+        }
+        navHeaderName.setText(navHeaderNamest);
 
 
         //make a json
