@@ -28,8 +28,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 
 public class MainActivity extends AppCompatActivity
@@ -45,8 +47,10 @@ public class MainActivity extends AppCompatActivity
     private String usrage;
     private String usrscenes;
     private String usrlocation;
-    private String usrlatlng;
+    private String usrlat;
+    private String usrlng;
 
+    public static final MediaType JSON= MediaType.parse("application/json; charset=utf-8");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +69,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         //start new
         comicIV = (ImageView)findViewById(R.id.iv_comic);
-        url = "https://www.lego.com/r/www/r/catalogs/-/media/catalogs/characters/lbm%20characters/primary/70900_1to1_batman_360_480.png?l.r=1668006940";
+        url = "https://crested-trainer-205308.appspot.com/pictures";
 
         SharedPreferences preferences = getSharedPreferences("PROFILES", Context.MODE_PRIVATE);
 
@@ -73,7 +77,8 @@ public class MainActivity extends AppCompatActivity
         usrgender = preferences.getString("usrgender", "NONE");
         usrscenes = preferences.getString("usrscenes", "NONE");
         usrlocation = preferences.getString("usrlocation", "NONE");
-        usrlatlng = preferences.getString("usrlatlng", "NONE");
+        usrlat = preferences.getString("usrlat", "NONE");
+        usrlng = preferences.getString("usrlng", "NONE");
 
         this.setTitle(usrlocation);
 
@@ -107,27 +112,28 @@ public class MainActivity extends AppCompatActivity
         }
         navHeaderName.setText(navHeaderNamest);
 
-
-        //make a json
-        JSONObject jsonProfile = new JSONObject();
-        try {
-            jsonProfile.put("usrname", usrname);
-            jsonProfile.put("userage", usrage);
-            jsonProfile.put("usrgender", usrgender);
-            jsonProfile.put("usrscenes", usrscenes);
-            jsonProfile.put("usrlocation", usrlocation);
-            jsonProfile.put("usrlatlng", usrlatlng);
-        }catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Log.i("json",jsonProfile.toString());
-
         myHandler=new Handler(getApplicationContext().getMainLooper());
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 Looper.prepare();
-                final Bitmap img = getPic(url);//下载
+
+                //make a json
+                JSONObject jsonProfile = new JSONObject();
+                try {
+                    jsonProfile.put("usrname", usrname);
+                    jsonProfile.put("userage", usrage);
+                    jsonProfile.put("usrgender", usrgender);
+                    jsonProfile.put("usrscenes", usrscenes);
+                    jsonProfile.put("usrlocation", usrlocation);
+                    jsonProfile.put("usrlat", usrlat);
+                    jsonProfile.put("usrlng", usrlng);
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.i("json",jsonProfile.toString());
+
+                final Bitmap img = getPic(url,jsonProfile.toString());//下载
                 myHandler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -147,13 +153,17 @@ public class MainActivity extends AppCompatActivity
      * @param url
      * @return bitmap
      */
-    public Bitmap getPic(String url) {
+    public Bitmap getPic(String url, String json) {
         //获取okHttp对象get请求
         try {
             OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder().url(url).build();
-            ResponseBody body = client.newCall(request).execute().body();
-            InputStream in = body.byteStream();
+            RequestBody body = RequestBody.create(JSON, json);
+            Request request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
+            ResponseBody response = client.newCall(request).execute().body();
+            InputStream in = response.byteStream();
             Bitmap bitmap = BitmapFactory.decodeStream(in);
             return bitmap;
         } catch (IOException e) {

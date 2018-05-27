@@ -36,7 +36,8 @@ public class LocationActivity extends AppCompatActivity {
                 // TODO: Get info about the selected place.
                 Log.i(TAG, "Place: " + place.getName());
                 editor.putString("usrlocation", place.getName().toString().trim());
-                editor.putString("usrlatlng",place.getLatLng().toString());
+                editor.putString("usrlat",String.valueOf(place.getLatLng().latitude));
+                editor.putString("usrlng",String.valueOf(place.getLatLng().longitude));
                 editor.apply();
                 //turn to MainActivity
                 startActivity(new Intent(LocationActivity.this, MainActivity.class));
