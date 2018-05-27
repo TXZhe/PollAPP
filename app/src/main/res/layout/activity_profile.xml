@@ -63,7 +63,8 @@
                     android:textColorHint="#AAAAAA"
                     android:background="#ffffff"
                     android:padding="10px"
-                    android:id="@+id/et_name"/>
+                    android:id="@+id/et_name"
+                    android:textColor="@color/colorPrimaryDark"/>
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
@@ -99,7 +100,8 @@
                     android:textColorHint="#AAAAAA"
                     android:background="#ffffff"
                     android:padding="10px"
-                    android:id="@+id/et_birth"/>
+                    android:id="@+id/et_birth"
+                    android:textColor="@color/colorPrimaryDark"/>
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
@@ -140,7 +142,8 @@
                         android:layout_weight="1"
                         android:onClick="rbclick"
                         android:checked="false"
-                        android:text="Male" />
+                        android:text="Male"
+                        android:textColor="@color/colorPrimaryDark"/>
 
                     <RadioButton
                         android:id="@+id/rbFemale"
@@ -149,7 +152,8 @@
                         android:layout_weight="1"
                         android:onClick="rbclick"
                         android:checked="true"
-                        android:text="Female" />
+                        android:text="Female"
+                        android:textColor="@color/colorPrimaryDark"/>
                 </RadioGroup>
             </LinearLayout>
         </LinearLayout>
@@ -180,6 +184,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="8pt"
+                    android:textColor="@color/colorPrimaryDark"
                     android:id="@+id/sp_scenes"/>
             </LinearLayout>
         </LinearLayout>
@@ -193,7 +198,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="profile_submit"
-                android:text="START" />
+                android:text="START"
+                android:textColor="@color/colorPrimary"/>
         </LinearLayout>
     </LinearLayout>
 

@@ -1,5 +1,8 @@
 package capstone3.pollapp;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,7 +21,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -38,7 +43,17 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ImageView comicIV;
-    private String url;
+    private TextView o3TV;
+    private TextView pm10TV;
+    private TextView pm25TV;
+    private TextView no2TV;
+    private TextView aqiTV;
+    private LinearLayout mHiddenLayout;
+
+    private int mHiddenViewMeasuredHeight;
+
+    private String urlpic = "https://shit-205415.appspot.com/pictures";
+    private String urldata = "https://shit-205415.appspot.com/data";
 
     private Handler myHandler;
 
@@ -49,6 +64,8 @@ public class MainActivity extends AppCompatActivity
     private String usrlocation;
     private String usrlat;
     private String usrlng;
+
+    private JSONObject jsonProfile;
 
     public static final MediaType JSON= MediaType.parse("application/json; charset=utf-8");
 
@@ -68,8 +85,18 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         //start new
-        comicIV = (ImageView)findViewById(R.id.iv_comic);
-        url = "https://crested-trainer-205308.appspot.com/pictures";
+        comicIV = (ImageView) findViewById(R.id.iv_comic);
+        o3TV = (TextView) findViewById(R.id.tv_o3);
+        pm10TV = (TextView) findViewById(R.id.tv_pm10);
+        pm25TV = (TextView) findViewById(R.id.tv_pm25);
+        no2TV = (TextView) findViewById(R.id.tv_no2);
+        aqiTV = (TextView) findViewById(R.id.tv_aqi);
+        mHiddenLayout = (LinearLayout) findViewById(R.id.ll_hidden);
+
+        float mDensity = getResources().getDisplayMetrics().density;
+        mHiddenViewMeasuredHeight = (int) (mDensity * 180 + 0.5);
+
+        mHiddenLayout.setVisibility(View.GONE);
 
         SharedPreferences preferences = getSharedPreferences("PROFILES", Context.MODE_PRIVATE);
 
@@ -112,28 +139,27 @@ public class MainActivity extends AppCompatActivity
         }
         navHeaderName.setText(navHeaderNamest);
 
+        //make a json
+        jsonProfile = new JSONObject();
+        try {
+            jsonProfile.put("usrname", usrname);
+            jsonProfile.put("userage", usrage);
+            jsonProfile.put("usrgender", usrgender);
+            jsonProfile.put("usrscenes", usrscenes);
+            jsonProfile.put("usrlocation", usrlocation);
+            jsonProfile.put("usrlat", usrlat);
+            jsonProfile.put("usrlng", usrlng);
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.i("json",jsonProfile.toString());
+
         myHandler=new Handler(getApplicationContext().getMainLooper());
-        Thread thread = new Thread(new Runnable() {
+        Thread threadpic = new Thread(new Runnable() {
             @Override
             public void run() {
                 Looper.prepare();
-
-                //make a json
-                JSONObject jsonProfile = new JSONObject();
-                try {
-                    jsonProfile.put("usrname", usrname);
-                    jsonProfile.put("userage", usrage);
-                    jsonProfile.put("usrgender", usrgender);
-                    jsonProfile.put("usrscenes", usrscenes);
-                    jsonProfile.put("usrlocation", usrlocation);
-                    jsonProfile.put("usrlat", usrlat);
-                    jsonProfile.put("usrlng", usrlng);
-                }catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                Log.i("json",jsonProfile.toString());
-
-                final Bitmap img = getPic(url,jsonProfile.toString());//下载
+                final Bitmap img = getPic(urlpic,jsonProfile.toString());//下载
                 myHandler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -143,9 +169,57 @@ public class MainActivity extends AppCompatActivity
                 Looper.loop();
             }
         });
-        thread.start();
+        threadpic.start();
+
+        Thread threaddata = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Looper.prepare();
+                final JSONObject data = getData(urldata,jsonProfile.toString());//下载
+                myHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            aqiTV.setText(String.format("AQI: %.2f",data.getDouble("aqi")));
+                            no2TV.setText(String.format("NO2: %.2f",data.getDouble("no2")));
+                            pm25TV.setText(String.format("PM2.5: %.2f",data.getDouble("pm25")));
+                            pm10TV.setText(String.format("PM10: %.2f",data.getDouble("pm10")));
+                            o3TV.setText(String.format("O3: %.2f",data.getDouble("o3")));
+                        }catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                Looper.loop();
+            }
+        });
+        threaddata.start();
     }
     /***********************new****************************/
+
+
+    public JSONObject getData(String url, String json){
+        try {
+            OkHttpClient client = new OkHttpClient();
+            RequestBody body = RequestBody.create(JSON, json);
+            Request request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
+            ResponseBody response = client.newCall(request).execute().body();
+            String in = response.string();
+            Log.i("data",in);
+            try {
+                JSONObject data = new JSONObject(in);
+                return data;
+            }catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
     /**
@@ -154,7 +228,7 @@ public class MainActivity extends AppCompatActivity
      * @return bitmap
      */
     public Bitmap getPic(String url, String json) {
-        //获取okHttp对象get请求
+        //获取okHttp对象post请求
         try {
             OkHttpClient client = new OkHttpClient();
             RequestBody body = RequestBody.create(JSON, json);
@@ -165,6 +239,7 @@ public class MainActivity extends AppCompatActivity
             ResponseBody response = client.newCall(request).execute().body();
             InputStream in = response.byteStream();
             Bitmap bitmap = BitmapFactory.decodeStream(in);
+            Log.i("pic","Okay");
             return bitmap;
         } catch (IOException e) {
             e.printStackTrace();
@@ -193,6 +268,59 @@ public class MainActivity extends AppCompatActivity
         startActivity(new Intent(MainActivity.this, LocationActivity.class));
         MainActivity.this.finish();
     }
+
+
+    public void Gstar(View v){
+        if(mHiddenLayout.getVisibility() == View.GONE) {
+            animateOpen(mHiddenLayout);
+        }
+        else
+        {
+            animateClose(mHiddenLayout);
+        }
+
+    }
+
+
+    private void animateOpen(View v) {
+        v.setVisibility(View.VISIBLE);
+        ValueAnimator animator = createDropAnimator(v, 0,
+                mHiddenViewMeasuredHeight);
+        animator.start();
+
+    }
+
+    private void animateClose(final View view) {
+        int origHeight = view.getHeight();
+        ValueAnimator animator = createDropAnimator(view, origHeight, 0);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                view.setVisibility(View.GONE);
+            }
+
+        });
+        animator.start();
+    }
+
+    private ValueAnimator createDropAnimator(final View v, int start, int end) {
+        ValueAnimator animator = ValueAnimator.ofInt(start, end);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator arg0) {
+                int value = (int) arg0.getAnimatedValue();
+                ViewGroup.LayoutParams layoutParams = v.getLayoutParams();
+                layoutParams.height = value;
+                v.setLayoutParams(layoutParams);
+
+            }
+        });
+        return animator;
+    }
+
+
+
     /*******************end new****************************/
     @Override
     public void onBackPressed() {

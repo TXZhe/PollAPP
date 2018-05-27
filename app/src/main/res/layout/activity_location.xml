@@ -7,16 +7,37 @@
     android:orientation="vertical"
     android:background="@color/colorSummerDGreen"
     tools:context="capstone3.pollapp.LocationActivity">
-    <fragment
-        android:id="@+id/place_autocomplete_fragment"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-        />
-    <ImageView
+        android:layout_height="0px"
+        android:layout_weight="1">
+
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/go"
-        android:layout_margin="50sp"/>
+        android:layout_height="0px"
+        android:layout_weight="5">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/go"
+            android:layout_margin="10sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="3"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+        <Button
+            android:layout_marginTop="@dimen/fab_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Search your dream city"
+            android:textColor="@color/colorPrimary"
+            android:onClick="googleLocation"/>
+    </LinearLayout>
 
 </LinearLayout>
