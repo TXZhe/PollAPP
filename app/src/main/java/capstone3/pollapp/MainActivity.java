@@ -179,14 +179,15 @@ public class MainActivity extends AppCompatActivity
                 myHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        try {
-                            aqiTV.setText(String.format("AQI: %.2f",data.getDouble("aqi")));
-                            no2TV.setText(String.format("NO2: %.2f",data.getDouble("no2")));
-                            pm25TV.setText(String.format("PM2.5: %.2f",data.getDouble("pm25")));
-                            pm10TV.setText(String.format("PM10: %.2f",data.getDouble("pm10")));
-                            o3TV.setText(String.format("O3: %.2f",data.getDouble("o3")));
-                        }catch (JSONException e) {
-                            e.printStackTrace();
+                        if(data!=null){
+                            try {
+                                aqiTV.setText(String.format("AQI: %.2f",data.getDouble("aqi")));
+                                no2TV.setText(String.format("NO2: %.2f",data.getDouble("no2")));
+                                pm25TV.setText(String.format("PM2.5: %.2f",data.getDouble("pm25")));
+                                pm10TV.setText(String.format("PM10: %.2f",data.getDouble("pm10")));
+                                o3TV.setText(String.format("O3: %.2f",data.getDouble("o3")));
+                            }catch (JSONException e) {
+                                e.printStackTrace();                            }
                         }
                     }
                 });
