@@ -6,12 +6,14 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,6 +24,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -49,6 +53,12 @@ public class MainActivity extends AppCompatActivity
     private TextView no2TV;
     private TextView aqiTV;
     private LinearLayout mHiddenLayout;
+    private LinearLayout guiLayout;
+    private ImageButton locationBT;
+    private ImageButton profileBT;
+    private ImageView dataBT;
+
+    private View[] GUI= new View[3];
 
     private int mHiddenViewMeasuredHeight;
 
@@ -92,6 +102,14 @@ public class MainActivity extends AppCompatActivity
         no2TV = (TextView) findViewById(R.id.tv_no2);
         aqiTV = (TextView) findViewById(R.id.tv_aqi);
         mHiddenLayout = (LinearLayout) findViewById(R.id.ll_hidden);
+        guiLayout = (LinearLayout) findViewById(R.id.ll_gui);
+        locationBT = (ImageButton) findViewById(R.id.bt_location);
+        profileBT = (ImageButton) findViewById(R.id.bt_profile);
+        dataBT = (ImageView) findViewById(R.id.bt_data);
+
+        GUI[0] = locationBT;
+        GUI[1] = profileBT;
+        GUI[2] = dataBT;
 
         float mDensity = getResources().getDisplayMetrics().density;
         mHiddenViewMeasuredHeight = (int) (mDensity * 180 + 0.5);
@@ -187,7 +205,8 @@ public class MainActivity extends AppCompatActivity
                                 pm10TV.setText(String.format("PM10: %.2f",data.getDouble("pm10")));
                                 o3TV.setText(String.format("O3: %.2f",data.getDouble("o3")));
                             }catch (JSONException e) {
-                                e.printStackTrace();                            }
+                                e.printStackTrace();
+                            }
                         }
                     }
                 });
@@ -198,6 +217,11 @@ public class MainActivity extends AppCompatActivity
     }
     /***********************new****************************/
 
+    /**
+     *  Get data from server
+     * @param url
+     * @return JSON object
+     */
 
     public JSONObject getData(String url, String json){
         try {
@@ -270,7 +294,9 @@ public class MainActivity extends AppCompatActivity
         MainActivity.this.finish();
     }
 
-
+    /**
+     * detail data button
+     */
     public void Gstar(View v){
         if(mHiddenLayout.getVisibility() == View.GONE) {
             animateOpen(mHiddenLayout);
@@ -282,7 +308,9 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-
+    /**
+     * detail data display animation
+     */
     private void animateOpen(View v) {
         v.setVisibility(View.VISIBLE);
         ValueAnimator animator = createDropAnimator(v, 0,
@@ -319,8 +347,41 @@ public class MainActivity extends AppCompatActivity
         });
         return animator;
     }
+    /**
+     * detail data display animation end
+     */
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev){
+        if(ev.getAction() == MotionEvent.ACTION_DOWN){
+            ShouldHideButton(ev);
+        }
+        return super.dispatchTouchEvent(ev);
+    }
 
+    private  void ShouldHideButton(MotionEvent event){
+        boolean result = true;
+        for (View v:GUI){
+            int[] l = {0, 0};
+            v.getLocationInWindow(l);
+            int left = l[0], top = l[1],
+                    bottom = top + v.getHeight(),
+                    right = left + v.getWidth();
+            if(event.getX() > left && event.getX() < right
+                    && event.getY() > top && event.getY() < bottom){
+                result = false;
+                break;
+            }
+        }
+        if(result){
+            if(guiLayout.getVisibility() == View.GONE) {
+                guiLayout.setVisibility(View.VISIBLE);
+            }
+            else{
+                guiLayout.setVisibility(View.GONE);
+            }
+        }
+    }
 
     /*******************end new****************************/
     @Override
