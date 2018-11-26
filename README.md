@@ -1,0 +1,44 @@
+# Pollapp
+---
+Introduction
+-----------
+Pollapp is a capstone project in University of Turku.
+The purpose of this project is making good use of Copernicus data.
+After researching about the Copernicus services, we decide to focus on the air pollution data from CAMS. And make an APP which can visualize air pollution index as comics. Here comes the Pollapp.
+
+----------
+
+Team Member
+-----------
+ - KOSKINEN Eevert
+ - MAO Yunfei
+ - TANG Xianzhe
+ - VÄTTÖ Teppo
+ - XIONG Bing
+ - YIN Shubao
+
+----------
+
+Instruction
+-----------
+ 1. Step up this application on your Android phone.
+ 
+ ![logo][1]
+
+ 2. Fill in the profile form at first use.
+ 
+ ![profile][2]
+
+ 3. Search your target city.
+ 
+ ![target city][3]
+
+ 4. Check out the air quality there.
+ 
+ ![main][4]
+
+
+  [1]: https://lh3.googleusercontent.com/hVQYoYI8bzkINScA2-GT0GNFJ3vZNDPiZlKkgdUUvyoWZBy9NmEGRAEnUODP582oxcRhVT6TyaqfnbQneJb1IVeMjFCbBJoAMCBCQ8fJwDP-JdYHSwb_sdB57V39EEYOeozkArZoXs_ntv_GFrHr5ScZxTzmp1HasrkBA7oLfSylEFVmVuzG2Gzn1cjIYFQskR9SvHyxso3LHWs3xdnimxkXtBdLu6NlJmuyJ8sou-oHaaQ6XSPo_91z7dWSinHDMzlYV_DgkU4xi6arg0-uBE-TZxEUuMi_AmsthCTKPaNGo6KqgM45JgyXyoJqwzcxckx84M7YhvPaHGgnYupgI_ukxEa-hMomafeXCDhdQSzFpCFhUF7z_3_1pQNqIDudU54JaywktfZtWTHXXgB1_6-6FfLDXBcjbHj_UZzCBS17WM9heDYFGQNiV9RUQDHR-uDygUsQn6y-MFtI_tEpg50ftf9vt1H3PXxwByfsE13QRys7bd5RzGAog8U3SK8p5J3v2mvK1WwSnDT5x03Xt0mkRgny_ph4NOgnJzPmS9E5QVkC0zJL5pXWbfkSXp9-fXz_mySRdbiSZEVKypNjZczFm9kC0_2MUPioozEmmzmVR1UCwJ4Uf-lC6z0Tb4AmW8JaKOLFt9i6cZfz8sLi7vU=w199-h260-no
+  [2]: https://lh3.googleusercontent.com/hU2j_WpSgAXMOK71YxTsSdVW5jM8lxRVCcKUCmP36_nECjNNf-VRr94JzDBArIC4SDGwPeeG7zkgEr_a3E5PMN7zhienGRPdFwm_0IZbNG4h2ACgGkzydA0tk1NV4h7DRgUItmd2VivtGB5kaA0aY5yoyU8YDZqqtnHekgVQQnyrD3MC4eEoAsewXllLUoRD0juvzk65oApyFYbvLBnHbKKT90_G-yRonfn7Bnt7F1xI1VUu0BFiBF2xKoisZanHwgyaNj0Y9XLr1ut99otXbvMHOyZRWAp3uWssouwLm-DtpBHhWppLpJu2nuyeetr2_fJSj4NjWfw8_gmjxzXgqZM9GpoJO-FWT9IJmZVu7NlmxqwbOQhN0uLhSoogoN4hTTZoVShwKQb7HdbIU78DmkBq5Vd84aljcDQlA9zsU8Gj4U-P2A7bhlal8cw-C_-nojB6IGFjLl_1x4lH6kd22eN_UYehhHCGy7ieiRzvbq2C_Nb8pc7CT68_MezHhc_r80X5yDfFhigmf3njhQCqocu-pC-_LRGBNdNZv50c8431zdKLpigGTjv2XD8d_-KqL13_MGTZb9xaZ_tsdUv0Gj-GeQSn_4SpM5VlOBDb_oNeUUSgmVsImns4EIXqX8bOypf9tXHZDSF6-eE83XySFbw=w337-h599-no
+  [3]: https://lh3.googleusercontent.com/5gVnfU4QwmebT5Ync7ZG1Pb1owFaVbWcjbDkQqEvNI3rGkM295TAYPU9c3HnVgcccmCSRrLs6nXhRnMYrqiuQLYmxghW7T2BGx_EyoHVNq54dp-aTBpfjORCfZta1hKFQJLXcEr05SElXZJrr7VFAEnSu-nRdEtzjY_m87sm4ec7XpRt12GZOh_r0mjuFBOACAeqlvzJnUf_qITafJ4J5fDXmCZR3MWvPpiiofmAzxVYt3oWOoeP7vSg5cvIvuo8b3ge18XnFqHwrHngGHQCc1A68JzWnQR64nUXVtjDjZJ8C5g08nJ7Eqxyfwo2C30GoECzo7JrXL_bL2HgxBf5aIE2QNbvf1iS5I6HFyW05fbbXaoQOk6aZ1hOZPnWJuyZlDmGP6FiEfXjE6daM_tazXGeTI9n145js62MQIJt1repmZDwUsjeJAXnyONR-fd3Z1Pxxl-ZY_Wa9nkzmMwUoJQfpOZuOdp688F8_SiuRfj2HFxPrw2fyd1JMjmd31LTku5ycgpl-ldyCt-h9fouS9ygnrIm-Is5PVowv1Nbk8QfEAxfCeV4z5J6InOniE4kYCahAd30AWDPMKdgYeRR84pd4W_klRaAfHTZ3zbRZ83zET8Bm0qavJU5tiVsAB9WU1dadspXoENdp71cK0oAH4g=w337-h599-no
+  [4]: https://lh3.googleusercontent.com/qGwdWmwNBH4qiNQqJwZu97S2VFKT0jcDCaFXH_tv_TSPzEXnl58Lx-tVopKVyN6Vb2Ecry1Tly3_tUgAHvp9rRgZpZccwvvO5xvJPjaIQMCNV-6PoxVLo6r27YAMdtcUFnMt9i9_cIYMrK4koCxpWLInD5matuBAMdVVUCf3pvtzd7Kz685M9mDQTxvsWH23S7U8XIwpAWo3vugCXl4Z5hIRD3PqBvqZE51D--qjYeQ9mr9iLoU6Wk7rqwkJK2ivAdlBhdCMy-FKh0OnJPORilCu8xbmfQvrKekvxBlYeUacPxPeGXcpyqlwzqoRfhESH8D3-fxgRoEuqnbBKzus9Pjs5VMV6Jejxx7YdLyHer4aOKp3AlyyoHrkjlc3x7GBtFt4sRGbImk3IXH2cpebi7AFWT-GTSlWQOJcLWCwEXVr6dDLDeRYDnh-GNap-5CXPTENMF2x6fKXbEFnJr4IPrpMZf7_xba0LjBXuCtLCMMYIPUGQ6V4ySedGMLQ4gpFz9Bijo_QREPCGfofHnyhkNBc_bQmDbm-xYg_XfgCVTp65Jygw_k7NnFZuMtWjqPXsZj4c8Ovw2jZhk6RLGUN2F6HkYa8ETAZeWv3W0lIyl7LBd0dcTmMgPYbX-Gs1AuXGnqsIWwOM0GwQOpEnhYcUdc=w337-h599-no
